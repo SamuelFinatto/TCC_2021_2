@@ -1,0 +1,1 @@
+docker build -t rabbitmq_tcc -f Dockerfile .

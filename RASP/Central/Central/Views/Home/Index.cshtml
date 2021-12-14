@@ -1,0 +1,50 @@
+﻿@model List<Modules>
+@using DataCommunicator.Models
+
+@{
+    ViewData["Title"] = "Principal";
+}
+
+<div class="text-center">
+    <p>Lista de dispositivos criados no banco de dados:</p>
+    <div class="containerModules">
+        <div class="row">
+            @foreach(Modules module in Model)
+            {
+                <module> 
+                    <h2>@module.Name</h2> 
+                    <h4>IP: @module.IpAddress</h4> 
+                    <h4>MAC: @module.MacAddress</h4> 
+                         <p> 
+                            <label class="switch"> 
+
+                            @if (module.Type == ModulesType.assistive)
+                            {
+                                @if (module.Status ?? false)
+                                {
+                                    @Html.ActionLink("Abrir","Invert",new { id = module.Id }, new { @class = "btn btn-primary"})
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Fechar","Invert",new { id = module.Id }, new { @class = "btn btn-primary"})
+                                }
+                            }
+                            else
+                            {
+                                @if (module.Status ?? false)
+                                {
+                                    @Html.ActionLink("Ligar","Invert",new { id = module.Id }, new { @class = "btn btn-primary"})
+                                }
+                                else
+                                {
+                                    @Html.ActionLink("Desligar","Invert",new { id = module.Id }, new { @class = "btn btn-primary"})
+                                }
+                            }
+                            </label> 
+                         </p> 
+                    @Html.ActionLink("Editar", "Edit", new { id = module.Id }, new { @class = "btn btn-primary"})
+               </module>
+            }
+        </div>
+    </div>
+</div>

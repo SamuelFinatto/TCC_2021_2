@@ -1,0 +1,11 @@
+.pio
+.vscode/
+**/*/.vscode/
+**/*/node_modules/*.*
+bin
+obj
+*.dtbcache.v2
+*.suo
+*.dbmdl
+*.jfm
+*.db

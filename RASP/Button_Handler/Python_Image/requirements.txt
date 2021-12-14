@@ -1,0 +1,6 @@
+Rpi.GPIO
+pyflakes
+fake_rpi
+wifi
+requests
+netifaces

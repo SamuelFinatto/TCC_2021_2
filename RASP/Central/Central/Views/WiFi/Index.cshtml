@@ -1,0 +1,54 @@
+﻿@using DataCommunicator.Models
+@model SystemConfig
+@{
+    ViewBag.Title = "Editar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edição do módulo</h2>
+
+@using (Html.BeginForm())
+{
+    <h3>Nome da Central:</h3>
+    <h4>@Model.HostName</h4>
+    <br/>
+    <h3>Endereço IP:</h3>
+    <h4>@Model.Ip</h4>
+    <br/>
+    <h3>Nome da rede:</h3>
+    <h4>@Model.Ssid</h4>
+    <br/>
+    <h3>Senha da rede:</h3>
+    <h4>@Model.Password</h4>
+
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ssid, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Ssid, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Ssid, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar", "Index", "Home")
+</div>

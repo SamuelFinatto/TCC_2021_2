@@ -1,0 +1,72 @@
+trigger:
+- master
+
+schedules:
+  - cron: "0 0 * * *"
+    displayName: Daily midnight build
+    branches:
+      include:
+        - master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+
+########### Preparation #############
+
+- script: |
+    sudo apt-get update
+    sudo apt install -y python3
+    sudo apt install -y python3-pip
+    sudo pip install -U platformio
+    pio platform install "native"
+  displayName: 'Install Dependences'
+
+########### Check Code & Build  #############
+
+# - script: |
+#     pio test -e native -d modules_base/ >> testsresults.txt
+#   displayName: 'Test IoT Code'
+  
+# - script: |
+#     python Scripts/TestsResultsParser.py testsresults.txt testsresults.xml
+#   displayName: 'Converting tests results'
+
+# - task: PublishTestResults@2
+#   inputs:
+#     testResultsFormat: 'NUnit'
+#     testResultsFiles: '**/testsresults.xml'
+#     mergeTestResults: true
+#     testRunTitle: 'Native Tests'
+#     failTaskOnFailedTests: true
+
+- script: |
+    pio run -e nodemcuv2 -d ESP/assistive_module/
+  displayName: 'Build assistive_module (.bin)'
+
+- script: |
+    pio run -e nodemcuv2 -d ESP/relay_module/
+  displayName: 'Build relay_module (.bin)'
+
+###########  Artifacts  #############
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'ESP/assistive_module/.pio/build/nodemcuv2/'
+    Contents: '*.bin'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: "Copying assistive_module binary file to artifacts folder"
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: 'ESP/relay_module/.pio/build/nodemcuv2/'
+    Contents: '*.bin'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: "Copying relay_module binary file to artifacts folder"
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'Firmware_$(Build.BuildNumber)'
+    publishLocation: 'Container'

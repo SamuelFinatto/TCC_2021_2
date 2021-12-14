@@ -1,0 +1,20 @@
+version: "3.3"
+services:
+  central:
+    container_name: "Central"
+    network_mode: "host"
+    image: "central_tcc"
+    restart: always
+  handler:
+    container_name: "Button_Handler"
+    network_mode: "host"
+    image: "handler_tcc"
+    privileged: true 
+    restart: always
+  rabbitmq:
+    container_name: "rabbitmq_tcc"
+    network_mode: "host"
+    image: "rabbitmq_tcc"
+    restart: always
+    volumes:
+      - /data:/data/mnesia
